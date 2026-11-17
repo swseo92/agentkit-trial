@@ -1,0 +1,22 @@
+name: check
+# PR에는 병합 결과를 보는 검사 하나, push는 main에서만(병합 뒤 확인용). job의 이름 check를 병합 프로그램이 읽는다.
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'main' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  check:
+    # 도는 곳은 저장소 변수 CHECK_RUNS_ON(JSON 목록)으로 가른다. 없으면 호스팅.
+    runs-on: ${{ vars.CHECK_RUNS_ON && fromJSON(vars.CHECK_RUNS_ON) || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: ./check

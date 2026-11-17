@@ -1,0 +1,157 @@
+# 판 trial-dev의 정의. 본은 agentkit의 .kanban/dev.toml(34078ae3)이고 이름과 여는 이(openers)만 다르다.
+# 적용은 호스트에서 따로 한다(workflows stand trial-dev). 병합만으로는 판이 달라지지 않는다.
+name = "trial-dev"
+entry = ["todo", "backlog"]
+openers = [
+  "claude:e01e14c5-e77f-4b27-87bf-b8332a805de5", # repo
+  "claude:e4b7c446-de26-4c04-ac94-f01d33f29d7c", # devflow
+]
+unaskable = ["plugin:"]
+ranked = ["merging"]
+
+[[states]]
+name = "backlog"
+kind = "held"
+label = "보관함"
+notify = []
+
+[[states]]
+name = "todo"
+kind = "ready"
+label = "대기"
+notify = []
+
+[[states]]
+name = "doing"
+kind = "active"
+label = "진행"
+notify = ["owner"]
+
+[[states]]
+name = "decide"
+kind = "held"
+label = "결정 필요"
+notify = ["ask"]
+
+[[states]]
+name = "review"
+kind = "held"
+label = "리뷰"
+notify = []
+
+[[states]]
+name = "merging"
+kind = "held"
+label = "병합 대기"
+notify = []
+
+[[states]]
+name = "done"
+kind = "end"
+label = "완료"
+notify = ["author"]
+
+[[states]]
+name = "cancelled"
+kind = "cancel"
+label = "접음"
+notify = []
+
+[[moves]]
+from = "todo"
+to = "doing"
+take = true
+
+[[moves]]
+from = "backlog"
+to = "todo"
+
+[[moves]]
+from = "doing"
+to = "decide"
+need = [["question", "recommend", "ask"]]
+
+[[moves]]
+from = "decide"
+to = "doing"
+need = [["answer"]]
+
+[[moves]]
+from = "doing"
+to = "todo"
+need = [["reason"]]
+
+[[moves]]
+from = "doing"
+to = "review"
+need = [["pr", "review"]]
+
+[[moves]]
+from = "doing"
+to = "merging"
+need = [["pr"]]
+
+[[moves]]
+from = "review"
+to = "merging"
+need = [["pr", "reviewed"]]
+
+[[moves]]
+from = "review"
+to = "doing"
+need = [["reason"]]
+
+[[moves]]
+from = "review"
+to = "decide"
+need = [["question", "recommend", "ask"]]
+
+[[moves]]
+from = "merging"
+to = "done"
+need = [["result"]]
+
+[[moves]]
+from = "merging"
+to = "cancelled"
+need = [["folded"]]
+
+[[moves]]
+from = "merging"
+to = "doing"
+need = [["reason"]]
+
+[[moves]]
+from = "doing"
+to = "done"
+need = [["result"]]
+
+[[moves]]
+from = "doing"
+to = "cancelled"
+need = [["folded"]]
+
+[[moves]]
+from = "backlog"
+to = "cancelled"
+need = [["folded"]]
+
+[[moves]]
+from = "todo"
+to = "cancelled"
+need = [["folded"]]
+
+[[moves]]
+from = "todo"
+to = "backlog"
+need = [["reason"]]
+
+[[moves]]
+from = "decide"
+to = "cancelled"
+need = [["folded"]]
+
+[[moves]]
+from = "review"
+to = "cancelled"
+need = [["folded"]]

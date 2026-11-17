@@ -1,0 +1,5 @@
+#!/bin/sh
+# 이 저장소의 검사 하나. 로컬과 CI가 같은 명령을 쓴다. 표준 라이브러리만.
+set -e
+cd "$(dirname "$0")"
+exec python3 -m unittest discover -s tests -t . -v
