@@ -1,4 +1,4 @@
-# 판 trial-dev의 정의. 본은 agentkit의 .kanban/dev.toml(34078ae3)이고 이름과 여는 이(openers)만 다르다.
+# 판 trial-dev의 정의. 본은 agentkit의 판 정의 dev(34078ae3)이고 이름과 여는 이(openers)만 다르다.
 # 적용은 호스트에서 따로 한다(workflows stand trial-dev). 병합만으로는 판이 달라지지 않는다.
 name = "trial-dev"
 entry = ["todo", "backlog"]
