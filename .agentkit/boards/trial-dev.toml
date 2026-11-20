@@ -1,60 +1,62 @@
-# 판 trial-dev의 정의. 본은 agentkit의 판 정의 dev(34078ae3)이고 이름과 여는 이(openers)만 다르다.
-# 적용은 호스트에서 따로 한다(workflows stand trial-dev). 병합만으로는 판이 달라지지 않는다.
+# Board trial-dev of agentkit-trial: the flow definition (sushilife-agentkit .agentkit/boards/dev-flow.toml at its main,
+# with this board's name and openers). Workers open PRs with plain git and gh; the board has no review or merging state.
+# Apply: on the host, after this file is merged (workflows stand trial-dev).
+# The flow board's definition (docs/decisions/2026-11-20-dev-simplify.md, second version, sections 1 and 8; user decision 269).
+# No board runs it yet: board dev keeps .agentkit/boards/dev.toml. The switch is which workflow is stood on a board.
+# It is .agentkit/boards/dev.toml without the states review and merging and every move that touches them.
+# What is done on its changes: plugins/dev/devkit/CONTRACT.md section 3. The board only checks that the needed lines are there.
+# Two reserved line names (core/kanban/CONTRACT.md, the board definition): result is also written to the card's
+# result field, and ask is read by list --waiting. Do not use them for anything else.
+# Labels are English here: this file is a declaration under the Hangul gate (tools/boundaries.py HANGUL_TABLE).
 name = "trial-dev"
 entry = ["todo", "backlog"]
+# Addresses that may open a group and regroup cards: the same list as .agentkit/boards/dev.toml. Change both together.
 openers = [
   "claude:e01e14c5-e77f-4b27-87bf-b8332a805de5", # repo
   "claude:e4b7c446-de26-4c04-ac94-f01d33f29d7c", # devflow
 ]
+# Address prefixes not taken as the receiver of a question (ask): programs do not read a decide question.
 unaskable = ["plugin:"]
-ranked = ["merging"]
+# The skill relay names to a card that has no `skill` of its own (user decision 254). Relative to the main checkout of
+# the board's repository (core/kanban/CONTRACT.md, the board definition; plugins/required/relay/CONTRACT.md, the card's
+# skill at launch): a missing file fails the launch. Not in .agentkit/boards/dev.toml: the skill says `dev done`.
+default_skill = "docs/skills/worker-dev/SKILL.md"
+# No `ranked`: the only ranked column of dev.toml was merging, and nothing on a flow board reads a hand-set rank.
 
 [[states]]
 name = "backlog"
 kind = "held"
-label = "보관함"
+label = "Backlog"
 notify = []
 
 [[states]]
 name = "todo"
 kind = "ready"
-label = "대기"
+label = "Ready"
 notify = []
 
 [[states]]
 name = "doing"
 kind = "active"
-label = "진행"
+label = "In progress"
 notify = ["owner"]
 
 [[states]]
 name = "decide"
 kind = "held"
-label = "결정 필요"
+label = "Decision needed"
 notify = ["ask"]
-
-[[states]]
-name = "review"
-kind = "held"
-label = "리뷰"
-notify = []
-
-[[states]]
-name = "merging"
-kind = "held"
-label = "병합 대기"
-notify = []
 
 [[states]]
 name = "done"
 kind = "end"
-label = "완료"
+label = "Done"
 notify = ["author"]
 
 [[states]]
 name = "cancelled"
 kind = "cancel"
-label = "접음"
+label = "Folded"
 notify = []
 
 [[moves]]
@@ -65,6 +67,11 @@ take = true
 [[moves]]
 from = "backlog"
 to = "todo"
+
+[[moves]]
+from = "todo"
+to = "backlog"
+need = [["reason"]]
 
 [[moves]]
 from = "doing"
@@ -81,55 +88,11 @@ from = "doing"
 to = "todo"
 need = [["reason"]]
 
-[[moves]]
-from = "doing"
-to = "review"
-need = [["pr", "review"]]
-
-[[moves]]
-from = "doing"
-to = "merging"
-need = [["pr"]]
-
-[[moves]]
-from = "review"
-to = "merging"
-need = [["pr", "reviewed"]]
-
-[[moves]]
-from = "review"
-to = "doing"
-need = [["reason"]]
-
-[[moves]]
-from = "review"
-to = "decide"
-need = [["question", "recommend", "ask"]]
-
-[[moves]]
-from = "merging"
-to = "done"
-need = [["result"]]
-
-[[moves]]
-from = "merging"
-to = "cancelled"
-need = [["folded"]]
-
-[[moves]]
-from = "merging"
-to = "doing"
-need = [["reason"]]
-
+# Goal reached (`dev done`, or `dev flow` once every PR of the card is merged and installed)
 [[moves]]
 from = "doing"
 to = "done"
 need = [["result"]]
-
-[[moves]]
-from = "doing"
-to = "cancelled"
-need = [["folded"]]
 
 [[moves]]
 from = "backlog"
@@ -142,16 +105,11 @@ to = "cancelled"
 need = [["folded"]]
 
 [[moves]]
-from = "todo"
-to = "backlog"
-need = [["reason"]]
-
-[[moves]]
-from = "decide"
+from = "doing"
 to = "cancelled"
 need = [["folded"]]
 
 [[moves]]
-from = "review"
+from = "decide"
 to = "cancelled"
 need = [["folded"]]
