@@ -17,10 +17,10 @@ openers = [
 ]
 # Address prefixes not taken as the receiver of a question (ask): programs do not read a decide question.
 unaskable = ["plugin:"]
-# The skill relay names to a card that has no `skill` of its own (user decision 254). Relative to the main checkout of
-# the board's repository (core/kanban/CONTRACT.md, the board definition; plugins/required/relay/CONTRACT.md, the card's
-# skill at launch): a missing file fails the launch. Not in .agentkit/boards/dev.toml: the skill says `dev done`.
-default_skill = "docs/skills/worker-dev/SKILL.md"
+# The skill relay names to a card that has no `skill` of its own: the worker skill of the flow board, which lives in
+# the repository registered as `agentkit` (`@<repository>/<path>`: that repository's main checkout). A missing file
+# fails the launch.
+default_skill = "@agentkit/docs/skills/worker-dev/SKILL.md"
 # No `ranked`: the only ranked column of dev.toml was merging, and nothing on a flow board reads a hand-set rank.
 
 [[states]]
