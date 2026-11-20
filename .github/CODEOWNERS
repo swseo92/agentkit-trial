@@ -1,5 +1,4 @@
 # 울타리 경로 목록. 강제하지 않는다: 이 경로를 바꾸는 PR은 제목 첫머리에 [울타리]를 붙인다.
 /.github/     @swseo92
 /.agentkit/   @swseo92
-/check        @swseo92
 AGENTS.md     @swseo92
