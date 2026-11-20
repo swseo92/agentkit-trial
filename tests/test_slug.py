@@ -14,4 +14,4 @@ class Slugify(unittest.TestCase):
         self.assertEqual(slugify("!!!"), "")
 
     def test_digits_kept(self):
-        self.assertEqual(slugify("A1 b2"), "a1_b2")
+        self.assertEqual(slugify("A1 b2"), "a1-b2")
