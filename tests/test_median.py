@@ -13,6 +13,9 @@ class Median(unittest.TestCase):
     def test_unsorted_odd(self):
         self.assertEqual(median([9, 1, 5, 7, 3]), 5)
 
+    def test_even_length_is_mean_of_middle_two(self):
+        self.assertEqual(median([4, 1, 3, 2]), 2.5)
+
     def test_empty_raises(self):
         with self.assertRaises(ValueError):
             median([])
