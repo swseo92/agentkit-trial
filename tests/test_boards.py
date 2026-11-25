@@ -8,10 +8,10 @@ ROOT = Path(__file__).resolve().parent.parent
 
 class BoardFiles(unittest.TestCase):
     def test_each_board_has_its_definition(self):
-        boards = tomllib.loads((ROOT / ".kanban/repo.toml").read_text(encoding="utf-8"))["board"]
+        boards = tomllib.loads((ROOT / ".agentkit/repo.toml").read_text(encoding="utf-8"))["board"]
         self.assertTrue(boards)
         for board in boards:
-            definition = tomllib.loads((ROOT / f".kanban/{board['name']}.toml").read_text(encoding="utf-8"))
+            definition = tomllib.loads((ROOT / f".agentkit/boards/{board['name']}.toml").read_text(encoding="utf-8"))
             self.assertEqual(definition["name"], board["name"])
 
 
