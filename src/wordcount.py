@@ -11,9 +11,15 @@ def count(text):
 def main(argv=()):
     parser = argparse.ArgumentParser(prog="wordcount")
     parser.add_argument("--chars-only", action="store_true", help="글자 수만 찍는다")
+    parser.add_argument("--lines-only", action="store_true", help="줄 수만 찍는다")
     args = parser.parse_args(list(argv))
     lines, words, chars = count(sys.stdin.read())
-    print(chars if args.chars_only else f"{lines} {words} {chars}")
+    if args.chars_only:
+        print(chars)
+    elif args.lines_only:
+        print(lines)
+    else:
+        print(f"{lines} {words} {chars}")
 
 
 if __name__ == "__main__":
