@@ -7,10 +7,10 @@ from unittest import mock
 from src import wordcount
 
 
-def run(text):
+def run(text, *args):
     out = io.StringIO()
     with mock.patch("sys.stdin", io.StringIO(text)), redirect_stdout(out):
-        wordcount.main()
+        wordcount.main(args)
     return out.getvalue()
 
 
@@ -23,6 +23,9 @@ class WordCount(unittest.TestCase):
 
     def test_several_lines_with_korean(self):
         self.assertEqual(run("안녕 세상\nhello\n하나 둘 셋\n"), "3 6 19\n")
+
+    def test_chars_only(self):
+        self.assertEqual(run("ab\ncd\n", "--chars-only"), "6\n")
 
 
 if __name__ == "__main__":
