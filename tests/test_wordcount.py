@@ -27,6 +27,9 @@ class WordCount(unittest.TestCase):
     def test_chars_only(self):
         self.assertEqual(run("ab\ncd\n", "--chars-only"), "6\n")
 
+    def test_lines_only(self):
+        self.assertEqual(run("ab\ncd\n", "--lines-only"), "2\n")
+
 
 if __name__ == "__main__":
     unittest.main()
