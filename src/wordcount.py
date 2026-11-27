@@ -1,4 +1,5 @@
 """표준 입력을 읽어 줄·낱말·글자 수를 한 줄로 찍는다."""
+import argparse
 import sys
 
 
@@ -7,10 +8,13 @@ def count(text):
     return text.count("\n"), len(text.split()), len(text)
 
 
-def main():
+def main(argv=()):
+    parser = argparse.ArgumentParser(prog="wordcount")
+    parser.add_argument("--chars-only", action="store_true", help="글자 수만 찍는다")
+    args = parser.parse_args(list(argv))
     lines, words, chars = count(sys.stdin.read())
-    print(f"{lines} {words} {chars}")
+    print(chars if args.chars_only else f"{lines} {words} {chars}")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
