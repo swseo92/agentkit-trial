@@ -12,12 +12,15 @@ def main(argv=()):
     parser = argparse.ArgumentParser(prog="wordcount")
     parser.add_argument("--chars-only", action="store_true", help="글자 수만 찍는다")
     parser.add_argument("--lines-only", action="store_true", help="줄 수만 찍는다")
+    parser.add_argument("--words-only", action="store_true", help="낱말 수만 찍는다")
     args = parser.parse_args(list(argv))
     lines, words, chars = count(sys.stdin.read())
     if args.chars_only:
         print(chars)
     elif args.lines_only:
         print(lines)
+    elif args.words_only:
+        print(words)
     else:
         print(f"{lines} {words} {chars}")
 
